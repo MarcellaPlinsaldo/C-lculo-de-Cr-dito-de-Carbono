@@ -111,10 +111,12 @@ litro_semanal = int
 litro_mensal = int
 litro_anual = int
 
-
+#Iniciando o menu, consequentemente, todo codigo
+menu()
 
 #Repetição que chama todas as funções e mantém o menu ativo até a pessoa desejar sair
 while (True):
+    
     if opcao_menu == 1:
         chamadas()
         calculoDeEmissao(transporte, litro_diario, "dia")
