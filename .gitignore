@@ -1,129 +1,146 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+def menu():
+    global opcao_menu
+    print("\nQuantas árvores cada pessoa precisa plantar por ano de acordo com a sua emissão de CO2")
+    print('''
+            MENU:
+            
+            [1] - Cálculo Diário
+            [2] - Cálculo Semanal
+            [3] - Cálculo Mensal
+            [4] - Cálculo Anual
+            [5] - Sair
+            ''')
+    opcao_menu = int(input("Escolha uma opção: "))
 
-# C extensions
-*.so
+def perguntaTransporte():
+    global transporte
+    print(f"Qual tipo de transporte que você utiliza para se locomover?\nUse {CRED} 1 = Carro{CEND}, {CGREEN}2 = Ônibus{CEND}:")
+    transporte = int(input())
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+def perguntaCombustivel():
+    global tipo_combustivel
+    print(f"\nQual o tipo de combustível que o automóvel usa?\nUse {CRED}1 = Diesel{CEND}, {CGREEN}2 = Gasolina{CEND}: ")
+    tipo_combustivel = int(input())
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+def calculoDeEmissao(transporte, litro, data):
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+    #Carro Diesel
+    if transporte == 1 and tipo_combustivel == 1:    
+        quant_pessoas = int(input("Quantas pessoas estavam no carro? "))
+        carro_diesel = litro * 0.83 * 3.7
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
+        print("\nSua emissão é de %.2fKg CO2 por %s" 
+              "\n"
+              "Você precisará plantar: %d árvores na Mata Atlântica e %d árvores na Amazônia" 
+              % (carro_diesel, data, carro_diesel/130, carro_diesel/222))
+    
+    #Carro Gasolina
+    elif transporte == 1 and tipo_combustivel == 2:
+        quant_pessoas = int(input("Quantas pessoas estavam no carro? "))
+        carro_gasolina = litro * 0.82 * 0.75 * 3.7
 
-# Translations
-*.mo
-*.pot
+        print("\nSua emissão é de %.2fKg CO2 por %s"
+              "\n"
+              "Você precisará plantar: %d árvores na Mata Atlântica e %d árvores na Amazônia" 
+              % (carro_gasolina, data, carro_gasolina/130, carro_gasolina/222))
+      
+    #Ônibus Diesel
+    elif transporte == 2 and tipo_combustivel == 1:    
+        quant_pessoas = int(input("Quantas pessoas estavam no ônibus?: "))   
+        onibus_diesel = litro * 0.83 * 3.7 / quant_pessoas
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+        print("\nSua emissão é de %.2fKg CO2 por %s"
+              "\n"
+              "Você precisará plantar: %d árvores na Mata Atlântica e %d árvores na Amazônia" 
+              % (onibus_diesel, data, onibus_diesel/130, onibus_diesel/222))
+        
+    #Ônibus Gasolina
+    elif transporte == 2 and tipo_combustivel == 2:      
+        quant_pessoas = int (input("Quantas pessoas estavam no ônibus?: \n"))   
+        onibus_gasolina = litro * 0.82 * 0.75 * 3.7 / quant_pessoas
 
-# Flask stuff:
-instance/
-.webassets-cache
+        print("\nSua emissão é de %.2fKg CO2 por %s"
+              "\n"
+              "Você precisará plantar: %d árvores na Mata Atlântica e %d árvores na Amazônia" 
+              % (onibus_gasolina, data, onibus_gasolina/130, onibus_gasolina/222))
 
-# Scrapy stuff:
-.scrapy
+#Função que chama basicamente todas as contas conforme for necessario
+def chamadas():
+    global litro_diario
+    global litro_semanal
+    global litro_mensal
+    global litro_anual
 
-# Sphinx documentation
-docs/_build/
+    perguntaTransporte()
 
-# PyBuilder
-target/
+    while (transporte > 2) or (transporte < 1):
 
-# Jupyter Notebook
-.ipynb_checkpoints
+        print(f"\n Opção inválida!\n {CRED}TENTE NOVAMENTE!{CEND}\n")
+        perguntaTransporte()
 
-# IPython
-profile_default/
-ipython_config.py
+    #Perguntar e salvar o tamanho do trajeto
+    print(f"\nQual a distância do trajeto em Km?:")
+    distancia = int(input())
 
-# pyenv
-.python-version
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
+    perguntaCombustivel()
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
+    while (tipo_combustivel > 2) or (tipo_combustivel < 1):
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
+        print(f"\n Código de combustível inválido!\n {CRED}TENTE NOVAMENTE!{CEND}\n")
+        perguntaCombustivel()
 
-# SageMath parsed files
-*.sage.py
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+    taxa_consumo = int(input("Taxa de consumo do combustível em Km/L: "))
+    litro_diario = distancia / taxa_consumo
+    litro_semanal = litro_diario * 5
+    litro_mensal = litro_diario * 22
+    litro_anual = litro_semanal * 53
+    #litro_passageiro = litro_anual / quant_pessoas
 
-# Spyder project settings
-.spyderproject
-.spyproject
 
-# Rope project settings
-.ropeproject
+#variaveis Globais
+CRED = '\033[1;31m'
+CGREEN = '\033[1;32m'
+CEND = '\033[0m'
+opcao_menu = int
+transporte = int
+tipo_combustivel = int
+litro_diario = int
+litro_semanal = int
+litro_mensal = int
+litro_anual = int
 
-# mkdocs documentation
-/site
 
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
 
-# Pyre type checker
-.pyre/
+#Repetição que chama todas as funções e mantém o menu ativo até a pessoa desejar sair
+while (True):
+    if opcao_menu == 1:
+        chamadas()
+        calculoDeEmissao(transporte, litro_diario, "dia")
+        menu()
+
+    elif opcao_menu == 2:
+        chamadas()
+        calculoDeEmissao(transporte, litro_semanal, "semana")
+        menu()
+
+
+    elif opcao_menu == 3:
+        chamadas()
+        calculoDeEmissao(transporte, litro_mensal, "mês")
+        menu()
+
+
+    elif opcao_menu == 4:
+        chamadas()
+        calculoDeEmissao(transporte, litro_anual, "ano")
+        menu()
+
+    elif opcao_menu == 5:
+        print("Obrigado!!")
+        break
+
+    else:
+        print(f"{CRED}Opção Inválida{CEND}, tente novamente")
+        menu()
